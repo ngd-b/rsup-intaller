@@ -1,0 +1,19 @@
+{
+  "name": "rsup",
+  "version": "0.1.0",
+  "description": "Rsup工具安装器",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "hboot",
+    "email": "bobolity@163.com"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.4.1",
+    "@commitlint/config-conventional": "^19.4.1",
+    "husky": "^9.1.5"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "commitlint": "commitlint --edit"
+  }
+}

@@ -1,0 +1,14 @@
+
+[workspace]
+resolver = "2"
+members = ["packages/core"]
+
+[workspace.dependencies]
+clap = "4"
+anyhow = "1.0.86"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
