@@ -1,7 +1,6 @@
 use std::path::Path;
 
 use clap::{command, Parser};
-use reqwest::Client;
 use tokio::fs;
 
 use crate::prompt::{prompt_add_to_env, Origin};
@@ -43,14 +42,12 @@ async fn main() {
     println!("rsup下载地址：{}", url);
     println!("rsup-web下载地址：{}", web_url);
 
-    // 创建客户端
-    let client = Client::new();
     // 下载rsup
     let rsup_url = format!("{}/rsup.tar.gz", &config.dir);
-    let rsup_task = rsup_utils::fs::download_file(&client, &url, &rsup_url);
+    let rsup_task = rsup_utils::fs::download_file(&url, &rsup_url);
     // 下载rsup-web
     let rsup_web_url = format!("{}/rsup-web.tar.gz", &config.dir);
-    let web_task = rsup_utils::fs::download_file(&client, &web_url, &rsup_web_url);
+    let web_task = rsup_utils::fs::download_file(&web_url, &rsup_web_url);
 
     let (rsup_res, web_res) = tokio::join!(rsup_task, web_task);
 
@@ -85,7 +82,15 @@ async fn main() {
         let target_dir = format!("{}/web", &config.dir);
         // 删除目录文件
         if Path::new(&target_dir).exists() {
-            fs::remove_file(&target_dir).await.unwrap();
+            match fs::remove_dir_all(&target_dir).await {
+                Ok(_) => {
+                    println!("删除目录文件成功:{}", &target_dir);
+                }
+                Err(e) => {
+                    eprintln!("删除目录文件失败:{}", e);
+                    return;
+                }
+            };
         }
 
         match rsup_utils::fs::decompress_file(&rsup_web_url, &target_dir).await {
