@@ -31,7 +31,7 @@ async fn main() {
     // let origin = Origin::Github;
 
     // 创建配置文件
-    let config = Config::write_config().unwrap();
+    let config = Config::write_config().await.unwrap();
 
     println!("rsup will be installed in: {}", &config.dir);
 
